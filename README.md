@@ -1,3 +1,3 @@
 # pokedex-api
 
-<h1>Meu primeiro projeto com SpringBoot<h1>
+<h3>Meu primeiro projeto com SpringBoot<h3>
