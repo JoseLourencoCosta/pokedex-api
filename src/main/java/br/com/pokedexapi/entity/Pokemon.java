@@ -6,6 +6,8 @@ import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.validation.constraints.NotBlank;
@@ -21,7 +23,15 @@ import lombok.Setter;
 public class Pokemon {
 
 	@Id
-	@Column(name = "number")
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "id")
+	@Getter
+	@Setter
+	private Integer id;
+	
+	
+	
+	@Column(name = "number" ,nullable = false, unique = true)
 	@Setter
 	@Getter
 	@NotNull(message = "Number is required!")
@@ -46,7 +56,7 @@ public class Pokemon {
 	private String imageUrl;
 	
 	@ElementCollection
-	@CollectionTable(name = "pokemon_type", joinColumns = @JoinColumn(name = "pokemon_number"))
+	@CollectionTable(name = "pokemon_type", joinColumns = @JoinColumn(name = "pokemon_id"))
 	@Column(name = "type")
 	@Getter
 	@Setter

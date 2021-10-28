@@ -26,43 +26,53 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.pokedexapi.entity.Pokemon;
 import br.com.pokedexapi.repository.PokemonRepository;
 
-
 @RestController
 @RequestMapping("/pokemons")
 public class PokemonController {
-	
+
 	@Autowired
 	private PokemonRepository pokemonRepository;
-	
-	
+
 	@GetMapping("/hello")
 	public String helloWorld() {
 		return "Hello World";
 	}
-	
-	
+
 	@PostMapping()
 	public Pokemon save(@RequestBody @Valid Pokemon pokemon) {
 		return this.pokemonRepository.save(pokemon);
 	}
-	
+
 	@GetMapping()
 	public List<Pokemon> findAll() {
 		List<Pokemon> pokemons = this.pokemonRepository.findAll();
 		return pokemons;
-		//return this.pokemonRepository.findAll();
+		// return this.pokemonRepository.findAll();
 	}
-		
-	@DeleteMapping("/{number}")
-	public void delete (@PathVariable("number") Integer number) {
-		this.pokemonRepository.deleteById(number);
+
+	@GetMapping("/{id}")
+	public ResponseEntity<Pokemon> findById(@PathVariable("id") Integer id) {
+		Optional<Pokemon> resultOne = this.pokemonRepository.findById(id);
+
+		if (resultOne.isPresent()) {
+			Pokemon pokemon = resultOne.get();
+
+			return new ResponseEntity<Pokemon>(pokemon, HttpStatus.OK);
+		}
+
+		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
-	
-	@PutMapping("/{number}")
-	public ResponseEntity<Pokemon> update(@PathVariable("number") Integer number, @RequestBody Pokemon pokemonJson) {
-		Optional<Pokemon> result = pokemonRepository.findById(number);
-		
-		if(result.isPresent()) {
+
+	@DeleteMapping("/{id}")
+	public void delete(@PathVariable("id") Integer id) {
+		this.pokemonRepository.deleteById(id);
+	}
+
+	@PutMapping("/{id}")
+	public ResponseEntity<Pokemon> update(@PathVariable("id") Integer id, @RequestBody Pokemon pokemonJson) {
+		Optional<Pokemon> result = pokemonRepository.findById(id);
+
+		if (result.isPresent()) {
 			Pokemon pokemonFromDataBase = result.get();
 			pokemonFromDataBase.setDescription(pokemonJson.getDescription());
 			pokemonFromDataBase.setName(pokemonJson.getName());
@@ -71,12 +81,12 @@ public class PokemonController {
 			pokemonFromDataBase.setNumber(pokemonJson.getNumber());
 			this.pokemonRepository.save(pokemonFromDataBase);
 			return new ResponseEntity<>(pokemonFromDataBase, HttpStatus.OK);
-			
+
 		}
-		
+
 		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
-	
+
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex) {
@@ -88,5 +98,5 @@ public class PokemonController {
 		});
 		return errors;
 	}
-	
+
 }
