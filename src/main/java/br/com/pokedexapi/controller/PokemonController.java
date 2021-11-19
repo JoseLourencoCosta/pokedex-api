@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -44,10 +45,13 @@ public class PokemonController {
 	}
 
 	@GetMapping()
-	public List<Pokemon> findAll() {
-		List<Pokemon> pokemons = this.pokemonRepository.findAll();
-		return pokemons;
-		// return this.pokemonRepository.findAll();
+	public List<Pokemon> find(@RequestParam(required = false) String name) {
+		if(name == null || name.trim() == "") {
+			return this.pokemonRepository.findAllByOrderByNumberAsc();
+		}
+		
+		return this.pokemonRepository.findByNameContainingIgnoreCaseOrderByNumberAsc(name);
+									  
 	}
 
 	@GetMapping("/{id}")
