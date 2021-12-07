@@ -53,7 +53,7 @@ public class Pokemon {
 	@Getter
 	@Setter
 	@NotBlank(message = "image URL cannot be empty!")
-	private String imageUrl;
+	private String imageURL;
 	
 	@ElementCollection
 	@CollectionTable(name = "pokemon_type", joinColumns = @JoinColumn(name = "pokemon_id"))

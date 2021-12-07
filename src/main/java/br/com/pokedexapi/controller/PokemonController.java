@@ -81,7 +81,7 @@ public class PokemonController {
 			pokemonFromDataBase.setDescription(pokemonJson.getDescription());
 			pokemonFromDataBase.setName(pokemonJson.getName());
 			pokemonFromDataBase.setTypes(pokemonJson.getTypes());
-			pokemonFromDataBase.setImageUrl(pokemonJson.getImageUrl());
+			pokemonFromDataBase.setImageURL(pokemonJson.getImageURL());
 			pokemonFromDataBase.setNumber(pokemonJson.getNumber());
 			this.pokemonRepository.save(pokemonFromDataBase);
 			return new ResponseEntity<>(pokemonFromDataBase, HttpStatus.OK);
